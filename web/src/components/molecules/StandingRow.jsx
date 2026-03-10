@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import RankBadge from '../atoms/RankBadge';
 
+const rankBorderClass = (rank) => {
+  if (rank === 1) return 'border-l-4 border-yellow-400';
+  if (rank === 2) return 'border-l-4 border-gray-400';
+  if (rank === 3) return 'border-l-4 border-orange-400';
+  return 'border-l-4 border-transparent';
+};
+
 /**
  * StandingRow - Single row in standings table
  */
@@ -20,13 +27,12 @@ const StandingRow = ({
   isCurrentTeam = false,
   onClick = null
 }) => {
-
   return (
     <tr
       className={`
-        border-b border-gray-200 last:border-0
-        hover:bg-ice-50 transition-colors
-        ${isCurrentTeam ? 'bg-ice-100 border-l-4 border-ice-500' : ''}
+        hover:bg-ice-50 transition-colors even:bg-gray-50/40
+        ${rankBorderClass(rank)}
+        ${isCurrentTeam ? 'bg-ice-50' : ''}
         ${onClick ? 'cursor-pointer' : ''}
       `}
       onClick={onClick}
@@ -34,10 +40,10 @@ const StandingRow = ({
       <td className="py-3 px-4">
         <RankBadge rank={rank} size="small" />
       </td>
-      <td className={`py-3 px-4 ${isCurrentTeam ? 'font-semibold' : 'font-medium'} text-gray-900`}>
+      <td className={`py-3 px-4 ${isCurrentTeam ? 'font-semibold text-ice-700' : 'font-medium text-gray-900'}`}>
         {teamName}
       </td>
-      <td className="py-3 px-4 text-center font-mono text-sm text-gray-700">
+      <td className="py-3 px-4 text-center font-mono text-sm text-gray-600">
         {gamesPlayed}
       </td>
       <td className="py-3 px-4 text-center font-mono text-sm text-gray-700">
@@ -52,17 +58,17 @@ const StandingRow = ({
       <td className="py-3 px-4 text-center font-mono text-sm font-bold text-gray-900">
         {points}
       </td>
-      <td className="py-3 px-4 text-center font-mono text-sm text-gray-700">
+      <td className="py-3 px-4 text-center font-mono text-sm text-gray-600">
         {goalsFor}
       </td>
-      <td className="py-3 px-4 text-center font-mono text-sm text-gray-700">
+      <td className="py-3 px-4 text-center font-mono text-sm text-gray-600">
         {goalsAgainst}
       </td>
-      <td className={`py-3 px-4 text-center font-mono text-sm font-medium ${goalDiffColor}`}>
+      <td className={`py-3 px-4 text-center font-mono text-sm font-semibold ${goalDiffColor}`}>
         {goalDiff > 0 ? '+' : ''}{goalDiff}
       </td>
       <td className="py-3 px-4 text-center">
-        <span className="text-xs font-medium text-gray-700">
+        <span className="text-xs font-medium text-gray-600">
           {streak || '-'}
         </span>
       </td>
