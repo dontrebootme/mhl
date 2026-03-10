@@ -1,9 +1,41 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
+    // Public read for schedule/standings data served to the frontend
+    match /mhlv2_games/{doc} {
       allow read: if true;
-      allow write: if false; // Only admin SDK (sync function) should write
+      allow write: if false;
+    }
+    match /mhlv2_seasons/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /mhlv2_divisions/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /mhlv2_teams/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+    // Standings uses a nested teams subcollection
+    match /mhlv2_standings/{doc} {
+      allow read: if true;
+      allow write: if false;
+      match /teams/{team} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+    // metadata is server-side only — deny all client access
+    match /mhlv2_metadata/{doc} {
+      allow read: if false;
+      allow write: if false;
+    }
+    // Deny everything else by default
+    match /{everything=**} {
+      allow read: if false;
+      allow write: if false;
     }
   }
 }

@@ -6,13 +6,14 @@ Syncs TeamLinkt data into Firestore under the mhlv2_ collection prefix.
 
 import json
 import logging
+import os
 import time
 from datetime import datetime
 from typing import Optional
 from zoneinfo import ZoneInfo
 
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from clients.teamlinkt import TeamLinktClient
@@ -24,12 +25,28 @@ logger = logging.getLogger(__name__)
 
 PACIFIC_TZ = ZoneInfo('America/Los_Angeles')
 
+# Secret token for authenticating Cloud Scheduler requests.
+# Set SYNC_SECRET env var in Cloud Function config; same value in Scheduler job body.
+SYNC_SECRET = os.environ.get('SYNC_SECRET', '')
+
 
 def get_firestore_client():
     """Get or initialize Firestore client."""
     if not firebase_admin._apps:
         firebase_admin.initialize_app()
     return firestore.client()
+
+
+def _is_authorized(req: https_fn.Request) -> bool:
+    """Verify the request comes from Cloud Scheduler via a shared secret.
+
+    Cloud Scheduler sends the secret in the X-Sync-Secret header.
+    If SYNC_SECRET is not configured, all requests are rejected.
+    """
+    if not SYNC_SECRET:
+        logger.error("SYNC_SECRET env var not set — rejecting all requests")
+        return False
+    return req.headers.get('X-Sync-Secret', '') == SYNC_SECRET
 
 
 @https_fn.on_request(
@@ -41,10 +58,21 @@ def get_firestore_client():
 def mhlv2_sync(req: https_fn.Request) -> https_fn.Response:
     """Sync function entry point for scheduled data synchronization.
 
-    Triggered by Cloud Scheduler. Accepts optional JSON body:
+    Triggered by Cloud Scheduler. Requires X-Sync-Secret header matching
+    the SYNC_SECRET environment variable.
+
+    Accepts optional JSON body:
       { "force": true, "season_id": "...", "division_ids": [...] }
     """
     logger.info(f"Sync triggered at {datetime.now(tz=PACIFIC_TZ).isoformat()}")
+
+    if not _is_authorized(req):
+        logger.warning(f"Unauthorized sync request from {req.remote_addr}")
+        return https_fn.Response(
+            response=json.dumps({'status': 'unauthorized'}),
+            status=401,
+            headers={'Content-Type': 'application/json'},
+        )
 
     force = False
     season_id = None
@@ -82,7 +110,7 @@ def mhlv2_sync(req: https_fn.Request) -> https_fn.Response:
             response=json.dumps({
                 'status': 'error',
                 'timestamp': datetime.now(tz=PACIFIC_TZ).isoformat(),
-                'error': str(e),
+                'error': 'Internal sync error. See Cloud Logging for details.',
             }),
             status=500,
             headers={'Content-Type': 'application/json'},
