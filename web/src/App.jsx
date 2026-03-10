@@ -30,23 +30,30 @@ function App() {
   }, []);
 
   const tabs = [
-    { to: '/', label: 'Dashboard', icon: '📊' },
-    { to: '/games', label: 'Games', icon: '🏒' },
-    { to: '/standings', label: 'Standings', icon: '🏆' },
+    { to: '/', label: 'Dashboard' },
+    { to: '/games', label: 'Games' },
+    { to: '/standings', label: 'Standings' },
   ];
 
   const header = (
-    <header className="bg-gradient-to-r from-ice-600 to-ice-800 text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="text-3xl">🏒</div>
-            <div>
-              <h1 className="text-2xl font-bold">MHL</h1>
-              <p className="text-ice-200 text-sm">Metropolitan Hockey League</p>
-            </div>
+    <header className="bg-ice-900 text-white sticky top-0 z-50 shadow-2xl">
+      {/* Accent stripe */}
+      <div className="h-0.5 bg-gradient-to-r from-ice-400 via-ice-300 to-team-red-500" />
+
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between py-3 gap-4">
+          {/* Wordmark */}
+          <div className="flex flex-col items-start shrink-0">
+            <span className="font-display font-black text-4xl leading-none tracking-tight text-white uppercase">
+              MHL
+            </span>
+            <span className="text-ice-400 text-[10px] font-semibold tracking-[0.2em] uppercase leading-none mt-0.5 hidden sm:block">
+              Metropolitan Hockey League
+            </span>
           </div>
-          <div className="w-full sm:w-56">
+
+          {/* Season selector */}
+          <div className="w-full sm:w-48">
             <label htmlFor="season-select" className="sr-only">Select Season</label>
             <Select
               id="season-select"
@@ -55,27 +62,27 @@ function App() {
               options={seasonOptions}
               placeholder={seasonOptions.length === 0 ? 'Loading seasons...' : 'Select Season'}
               disabled={seasonOptions.length === 0}
-              className="bg-white text-gray-900 font-medium shadow-sm"
+              className="bg-ice-800 text-ice-100 border-ice-700 text-sm"
             />
           </div>
         </div>
 
-        <nav className="mt-4 border-t border-ice-500 pt-2">
-          <div className="flex gap-2 overflow-x-auto">
+        {/* Nav */}
+        <nav className="border-t border-ice-800/80" aria-label="Main navigation">
+          <div className="flex gap-0 overflow-x-auto">
             {tabs.map(tab => (
               <NavLink
                 key={tab.to}
                 to={tab.to}
                 end={tab.to === '/'}
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all
+                  `px-5 py-3 font-display font-bold text-sm uppercase tracking-widest transition-colors whitespace-nowrap border-b-2
                   ${isActive
-                    ? 'bg-white text-ice-700 shadow-md'
-                    : 'text-ice-100 hover:bg-ice-500/50'
+                    ? 'text-white border-ice-400'
+                    : 'text-ice-400 hover:text-ice-200 border-transparent'
                   }`
                 }
               >
-                <span className="mr-2">{tab.icon}</span>
                 {tab.label}
               </NavLink>
             ))}
@@ -86,14 +93,11 @@ function App() {
   );
 
   const footer = (
-    <footer className="bg-gray-800 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🏒</span>
-            <span className="font-semibold">MHL</span>
-          </div>
-          <p className="text-sm text-gray-400">Metropolitan Hockey League Schedule & Standings</p>
+    <footer className="bg-ice-900 text-ice-500 border-t border-ice-800">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+          <span className="font-display font-black text-xl tracking-tight text-white uppercase">MHL</span>
+          <p className="text-xs tracking-wider uppercase">Metropolitan Hockey League · Schedule &amp; Standings</p>
         </div>
       </div>
     </footer>

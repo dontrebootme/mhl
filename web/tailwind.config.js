@@ -32,7 +32,8 @@ export default {
         tie: '#F59E0B',      // Yellow/Amber
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Barlow Condensed', 'system-ui', 'sans-serif'],
         mono: ['Roboto Mono', 'monospace'],
       },
     },

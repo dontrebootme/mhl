@@ -9,9 +9,9 @@ import StandingRow from '../molecules/StandingRow';
  */
 const SortIcon = ({ column, sortBy, sortDir }) => {
   if (sortBy !== column) {
-    return <span className="text-gray-400">↕</span>;
+    return <span className="text-ice-700 opacity-60">↕</span>;
   }
-  return <span className="text-ice-600">{sortDir === 'asc' ? '↑' : '↓'}</span>;
+  return <span className="text-ice-300">{sortDir === 'asc' ? '↑' : '↓'}</span>;
 };
 
 SortIcon.propTypes = {
@@ -19,6 +19,8 @@ SortIcon.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortDir: PropTypes.string.isRequired,
 };
+
+const headerCellClass = 'py-3 px-4 text-xs font-display font-bold text-ice-300 uppercase tracking-widest cursor-pointer hover:text-white transition-colors select-none';
 
 /**
  * StandingsTable - Complete division standings with sorting
@@ -93,10 +95,10 @@ const StandingsTable = ({
       <Card padding={false} className="overflow-hidden hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b-2 border-gray-200 sticky top-0">
+            <thead className="bg-ice-900 sticky top-0">
               <tr>
                 <th
-                  className="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-left`}
                   onClick={() => handleSort('rank')}
                 >
                   <div className="flex items-center gap-1">
@@ -104,7 +106,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-left`}
                   onClick={() => handleSort('teamName')}
                 >
                   <div className="flex items-center gap-1">
@@ -112,7 +114,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('gamesPlayed')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -120,7 +122,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('wins')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -128,7 +130,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('losses')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -136,7 +138,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('ties')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -144,7 +146,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('points')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -152,7 +154,7 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('goalsFor')}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -160,22 +162,22 @@ const StandingsTable = ({
                   </div>
                 </th>
                 <th
-                  className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  className={`${headerCellClass} text-center`}
                   onClick={() => handleSort('goalsAgainst')}
                 >
                   <div className="flex items-center justify-center gap-1">
                     GA <SortIcon column="goalsAgainst" sortBy={sortBy} sortDir={sortDir} />
                   </div>
                 </th>
-                <th className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                  +/-
+                <th className={`${headerCellClass} text-center cursor-default`}>
+                  +/−
                 </th>
-                <th className="py-3 px-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                <th className={`${headerCellClass} text-center cursor-default`}>
                   Streak
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white">
+            <tbody className="bg-white divide-y divide-gray-100">
               {sortedStandings.map((standing) => (
                 <StandingRow
                   key={standing.teamId}

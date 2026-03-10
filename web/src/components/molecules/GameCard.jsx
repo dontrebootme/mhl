@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
-import Card from '../atoms/Card';
-import Badge from '../atoms/Badge';
-import StatusBadge from '../atoms/StatusBadge';
 import DateBadge from '../atoms/DateBadge';
+import StatusBadge from '../atoms/StatusBadge';
 import LocationPin from '../atoms/LocationPin';
 import RecordDisplay from '../atoms/RecordDisplay';
 
 /**
- * GameCard - Compact game display for lists
+ * GameCard - Horizontal scoreboard layout with VS split
  */
 const GameCard = ({
   homeTeam,
@@ -24,85 +22,88 @@ const GameCard = ({
 }) => {
   const isCompleted = status === 'final';
   const isLive = status === 'live';
+  const hasScore = isCompleted || isLive;
   const homeWon = isCompleted && homeScore > awayScore;
   const awayWon = isCompleted && awayScore > homeScore;
-  const isTie = isCompleted && homeScore === awayScore;
 
   return (
-    <Card
-      className={`hover:shadow-lg transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
+    <div
+      className={`bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
-      padding={false}
     >
+      {/* Top accent line */}
+      {isCompleted && (
+        <div className="h-0.5 bg-gradient-to-r from-ice-700 to-ice-500" />
+      )}
+      {isLive && (
+        <div className="h-0.5 bg-team-red-500" />
+      )}
+
       <div className="p-4">
-        {/* Header with Date and Status */}
-        <div className="flex items-center justify-between mb-3">
+        {/* Date & Status row */}
+        <div className="flex items-center justify-between mb-4">
           <DateBadge date={date} variant="compact" />
           <StatusBadge status={status} />
         </div>
 
-        {/* Teams and Score */}
-        <div className="space-y-2">
-          {/* Home Team */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className="font-semibold text-gray-900 truncate">
-                {homeTeam}
-              </span>
-              {homeRecord && (
-                <RecordDisplay
-                  wins={homeRecord.wins}
-                  losses={homeRecord.losses}
-                  ties={homeRecord.ties}
-                  className="text-gray-600"
-                />
-              )}
+        {/* VS layout: home | score | away */}
+        <div className="flex items-center gap-3">
+          {/* Home team */}
+          <div className="flex-1 min-w-0 text-left">
+            <div className={`font-display font-bold text-xl uppercase leading-tight truncate ${isCompleted && !homeWon ? 'text-gray-400' : 'text-gray-900'}`}>
+              {homeTeam}
             </div>
-            <div className="flex items-center gap-2">
-              {isCompleted && homeWon && <Badge variant="win">W</Badge>}
-              {isCompleted && isTie && <Badge variant="tie">T</Badge>}
-              {(isCompleted || isLive) && (
-                <span className="font-mono text-2xl font-bold text-gray-900 w-8 text-right">
-                  {homeScore}
-                </span>
-              )}
-            </div>
+            {homeRecord && (
+              <RecordDisplay
+                wins={homeRecord.wins}
+                losses={homeRecord.losses}
+                ties={homeRecord.ties}
+                className="text-gray-500"
+              />
+            )}
           </div>
 
-          {/* Away Team */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className="font-semibold text-gray-900 truncate">
-                {awayTeam}
-              </span>
-              {awayRecord && (
-                <RecordDisplay
-                  wins={awayRecord.wins}
-                  losses={awayRecord.losses}
-                  ties={awayRecord.ties}
-                  className="text-gray-600"
-                />
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              {isCompleted && awayWon && <Badge variant="win">W</Badge>}
-              {isCompleted && isTie && <Badge variant="tie">T</Badge>}
-              {(isCompleted || isLive) && (
-                <span className="font-mono text-2xl font-bold text-gray-900 w-8 text-right">
+          {/* Score / VS center */}
+          <div className="shrink-0 text-center">
+            {hasScore ? (
+              <div className="flex items-center gap-1 tabular-nums">
+                <span className={`font-mono font-black text-4xl leading-none ${isCompleted && !homeWon ? 'text-gray-300' : 'text-gray-900'}`}>
+                  {homeScore}
+                </span>
+                <span className="text-gray-200 text-2xl font-light mx-0.5">–</span>
+                <span className={`font-mono font-black text-4xl leading-none ${isCompleted && !awayWon ? 'text-gray-300' : 'text-gray-900'}`}>
                   {awayScore}
                 </span>
-              )}
+              </div>
+            ) : (
+              <span className="font-display font-bold text-2xl text-gray-300 tracking-widest">VS</span>
+            )}
+          </div>
+
+          {/* Away team */}
+          <div className="flex-1 min-w-0 text-right">
+            <div className={`font-display font-bold text-xl uppercase leading-tight truncate ${isCompleted && !awayWon ? 'text-gray-400' : 'text-gray-900'}`}>
+              {awayTeam}
             </div>
+            {awayRecord && (
+              <RecordDisplay
+                wins={awayRecord.wins}
+                losses={awayRecord.losses}
+                ties={awayRecord.ties}
+                className="text-gray-500"
+              />
+            )}
           </div>
         </div>
 
-        {/* Footer with Time and Location */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
-          <span className="text-sm text-gray-600">{time}</span>
+        {/* Footer: time & location */}
+        <div className="flex items-center justify-center gap-2 mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
+          <span className="font-medium">{time}</span>
+          <span className="text-gray-200">·</span>
           <LocationPin location={location} compact />
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

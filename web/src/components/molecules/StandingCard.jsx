@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import RankBadge from '../atoms/RankBadge';
 
+const rankTopBarClass = (rank) => {
+  if (rank === 1) return 'bg-yellow-400';
+  if (rank === 2) return 'bg-gray-400';
+  if (rank === 3) return 'bg-orange-400';
+  return null;
+};
+
 /**
  * StandingCard - Mobile-friendly standing display card
  */
@@ -17,31 +24,37 @@ const StandingCard = ({
   isCurrentTeam = false,
   onClick = null
 }) => {
+  const topBar = rankTopBarClass(rank);
+
   return (
     <div
-      className={`bg-white rounded-lg border shadow-sm p-3 ${isCurrentTeam ? 'border-ice-500 bg-ice-50' : 'border-gray-200'} ${onClick ? 'cursor-pointer active:bg-gray-50' : ''}`}
+      className={`bg-white rounded-xl border shadow-sm overflow-hidden ${isCurrentTeam ? 'border-ice-400 ring-1 ring-ice-400/30' : 'border-gray-200'} ${onClick ? 'cursor-pointer active:bg-gray-50' : ''}`}
       onClick={onClick}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 min-w-0">
+      {/* Medal accent bar for top 3 */}
+      {topBar && <div className={`h-1 ${topBar}`} />}
+
+      <div className="p-3">
+        <div className="flex items-center gap-3">
           <RankBadge rank={rank} size="small" />
-          <span className={`font-medium text-gray-900 truncate ${isCurrentTeam ? 'font-semibold' : ''}`}>
+          <span className={`font-display font-bold text-base uppercase truncate flex-1 min-w-0 ${isCurrentTeam ? 'text-ice-700' : 'text-gray-900'}`}>
             {teamName}
           </span>
+          <div className="shrink-0 text-right">
+            <span className="font-mono font-black text-xl text-gray-900 leading-none">{points}</span>
+            <span className="text-[10px] font-bold text-gray-400 tracking-wider ml-0.5">PTS</span>
+          </div>
         </div>
-        <span className="font-bold text-gray-900 text-lg ml-2 shrink-0">
-          {points} <span className="text-xs font-normal text-gray-500">PTS</span>
-        </span>
-      </div>
-      <div className="flex items-center justify-between mt-2 text-sm text-gray-600">
-        <span className="font-mono">
-          {wins}-{losses}-{ties}
-        </span>
-        <div className="flex items-center gap-3">
-          <span className="text-gray-500">{gamesPlayed} GP</span>
-          <span className={`font-mono font-medium ${goalDiffColor}`}>
-            {goalDiff > 0 ? '+' : ''}{goalDiff}
+        <div className="flex items-center justify-between mt-2 pl-9">
+          <span className="font-mono text-sm text-gray-600">
+            {wins}–{losses}–{ties}
           </span>
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span>{gamesPlayed} GP</span>
+            <span className={`font-mono font-semibold ${goalDiffColor}`}>
+              {goalDiff > 0 ? '+' : ''}{goalDiff}
+            </span>
+          </div>
         </div>
       </div>
     </div>
