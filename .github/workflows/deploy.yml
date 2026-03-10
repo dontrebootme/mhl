@@ -77,10 +77,10 @@ jobs:
           npm ci
           npm audit --audit-level=high || echo "::warning::NPM vulnerabilities detected"
           npm run build
-      - name: Deploy Functions, Hosting (staging), and Firestore Rules
+      - name: Deploy Functions, Hosting, and Firestore Rules
         run: |
           set -o pipefail
           source functions/venv/bin/activate
           export PYTHONPATH=$PYTHONPATH:$(pwd)/functions
           firebase deploy --project=spof-io \
-            --only functions:mhlv2_sync,hosting:staging,firestore:rules,firestore:indexes
+            --only functions:mhlv2_sync,hosting:staging,hosting:production,firestore:rules,firestore:indexes
