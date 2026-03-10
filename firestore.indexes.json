@@ -18,13 +18,6 @@
       ]
     },
     {
-      "collectionGroup": "mhlv2_divisions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "season_id", "order": "ASCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "mhlv2_teams",
       "queryScope": "COLLECTION",
       "fields": [
