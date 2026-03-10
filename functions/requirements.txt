@@ -1,0 +1,9 @@
+# Scraper dependencies (mhl_scraper package)
+beautifulsoup4>=4.12.0
+requests>=2.32.0
+python-dateutil>=2.8.0
+
+# Firebase Functions
+firebase-functions>=0.1.0
+firebase-admin>=5.0.0
+google-cloud-firestore>=2.11.0

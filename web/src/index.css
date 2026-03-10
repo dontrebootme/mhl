@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Ice Rink Blues (Primary) */
+  --color-ice-50: #E6F4FB;
+  --color-ice-100: #CCE9F7;
+  --color-ice-200: #99D3EF;
+  --color-ice-300: #66BDE7;
+  --color-ice-400: #33A7DF;
+  --color-ice-500: #4A9FE8;
+  --color-ice-600: #3B7FBA;
+  --color-ice-700: #2C5F8B;
+  --color-ice-800: #1D405D;
+  --color-ice-900: #0E202E;
+
+  /* Team Reds (Accent) */
+  --color-team-red-300: #F4A5AA;
+  --color-team-red-500: #E63946;
+  --color-team-red-700: #B82D37;
+
+  /* Status Colors */
+  --color-win: #10B981;
+  --color-loss: #EF4444;
+  --color-tie: #F59E0B;
+
+  /* Fonts */
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: rgb(249 250 251);
+    color: rgb(17 24 39);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+  }
+}

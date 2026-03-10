@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "spof-io"
+  },
+  "targets": {
+    "spof-io": {
+      "hosting": {
+        "staging": ["mhl-v2-spof-io"],
+        "production": ["mhl-spof-io"]
+      }
+    }
+  }
+}
