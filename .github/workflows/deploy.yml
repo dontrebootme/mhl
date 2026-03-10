@@ -49,6 +49,10 @@ jobs:
         run: |
           cp -r mhl_scraper functions/
           find functions/mhl_scraper -name "__pycache__" -type d -exec rm -r {} + 2>/dev/null || true
+      - name: Write functions runtime env
+        env:
+          SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
+        run: printf 'SYNC_SECRET=%s\n' "$SYNC_SECRET" > functions/.env
       - name: Setup venv for Firebase Functions
         run: |
           cd functions
